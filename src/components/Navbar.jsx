@@ -5,6 +5,7 @@ export default function Navbar({ lang, setLang, t, cartCount = 0 }) {
   const languages = useMemo(() => ([
     { code: 'en', label: 'EN' },
     { code: 'es', label: 'ES' },
+    { code: 'id', label: 'ID' },
   ]), [])
 
   return (

@@ -7,10 +7,11 @@ export default function ProductGrid({ t, lang }) {
   const products = useMemo(() => ([
     {
       id: 'ui-kit',
-      name: { en: 'Neo UI Kit', es: 'Neo UI Kit' },
+      name: { en: 'Neo UI Kit', es: 'Neo UI Kit', id: 'Neo UI Kit' },
       description: {
         en: 'A minimalist component library for modern web apps.',
         es: 'Una biblioteca minimalista de componentes para apps web modernas.',
+        id: 'Pustaka komponen minimalis untuk aplikasi web modern.',
       },
       price: 49,
       lowSales: false,
@@ -18,10 +19,11 @@ export default function ProductGrid({ t, lang }) {
     },
     {
       id: 'sound-pack',
-      name: { en: 'Micro Sound Pack', es: 'Paquete de Sonidos Micro' },
+      name: { en: 'Micro Sound Pack', es: 'Paquete de Sonidos Micro', id: 'Paket Suara Micro' },
       description: {
         en: '200 crisp UI sounds crafted for digital products.',
         es: '200 sonidos nítidos de UI para productos digitales.',
+        id: '200 suara UI jernih untuk produk digital.',
       },
       price: 29,
       lowSales: true,
@@ -29,10 +31,11 @@ export default function ProductGrid({ t, lang }) {
     },
     {
       id: 'template',
-      name: { en: 'SaaS Starter Template', es: 'Plantilla SaaS Starter' },
+      name: { en: 'SaaS Starter Template', es: 'Plantilla SaaS Starter', id: 'Template SaaS Starter' },
       description: {
         en: 'Production-ready template integrating auth and billing.',
         es: 'Plantilla lista para producción con auth y pagos.',
+        id: 'Template siap produksi dengan autentikasi dan penagihan.',
       },
       price: 99,
       lowSales: false,
@@ -40,10 +43,11 @@ export default function ProductGrid({ t, lang }) {
     },
     {
       id: 'icon-pack',
-      name: { en: 'Mono Icon Pack', es: 'Paquete de Iconos Mono' },
+      name: { en: 'Mono Icon Pack', es: 'Paquete de Iconos Mono', id: 'Paket Ikon Mono' },
       description: {
         en: '700 vector icons in outline and solid styles.',
         es: '700 iconos vectoriales en estilos contorno y sólido.',
+        id: '700 ikon vektor dalam gaya garis dan solid.',
       },
       price: 39,
       lowSales: true,
@@ -52,10 +56,12 @@ export default function ProductGrid({ t, lang }) {
   ]), [])
 
   const handleBuy = (product) => {
+    const productName = product.name[lang] || product.name.en
+
     if (product.lowSales) {
       Swal.fire({
         title: t.alerts.rare.title,
-        text: t.alerts.rare.text(product.name[lang]),
+        text: t.alerts.rare.text(productName),
         icon: 'info',
         confirmButtonText: t.alerts.rare.confirm,
         showCancelButton: true,
@@ -95,27 +101,31 @@ export default function ProductGrid({ t, lang }) {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map(prod => (
-            <div key={prod.id} className="group rounded-2xl border border-slate-200 p-5 hover:shadow-lg transition-shadow bg-white">
-              <div className={`h-36 rounded-xl bg-gradient-to-br ${prod.color} mb-4`}></div>
-              <h3 className="font-semibold text-slate-900">{prod.name[lang]}</h3>
-              <p className="text-slate-600 text-sm mt-1 min-h-[40px]">{prod.description[lang]}</p>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-slate-900 font-semibold">{currency(prod.price)}</span>
-                <button
-                  onClick={() => handleBuy(prod)}
-                  className="inline-flex items-center justify-center rounded-lg bg-slate-900 text-white px-4 py-2 text-sm font-medium hover:bg-slate-800"
-                >
-                  {t.products.buy}
-                </button>
+          {products.map(prod => {
+            const name = prod.name[lang] || prod.name.en
+            const desc = prod.description[lang] || prod.description.en
+            return (
+              <div key={prod.id} className="group rounded-2xl border border-slate-200 p-5 hover:shadow-lg transition-shadow bg-white">
+                <div className={`h-36 rounded-xl bg-gradient-to-br ${prod.color} mb-4`}></div>
+                <h3 className="font-semibold text-slate-900">{name}</h3>
+                <p className="text-slate-600 text-sm mt-1 min-h-[40px]">{desc}</p>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-slate-900 font-semibold">{currency(prod.price)}</span>
+                  <button
+                    onClick={() => handleBuy(prod)}
+                    className="inline-flex items-center justify-center rounded-lg bg-slate-900 text-white px-4 py-2 text-sm font-medium hover:bg-slate-800"
+                  >
+                    {t.products.buy}
+                  </button>
+                </div>
+                {prod.lowSales && (
+                  <span className="mt-3 inline-block text-[11px] font-medium text-amber-700 bg-amber-100 px-2 py-1 rounded">
+                    {t.products.rareBadge}
+                  </span>
+                )}
               </div>
-              {prod.lowSales && (
-                <span className="mt-3 inline-block text-[11px] font-medium text-amber-700 bg-amber-100 px-2 py-1 rounded">
-                  {t.products.rareBadge}
-                </span>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>
